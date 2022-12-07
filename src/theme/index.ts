@@ -1,0 +1,35 @@
+export const THEME = {
+
+COLORS: {
+  
+MAIN_200: '#FBCFE8',
+MAIN_300: '#F9A8D4',
+MAIN_400: '#F472B6',
+TEXT_BLACK: '#000000',
+TEXT_GRAY: '#A9A9AD',
+TEXT_WHITE:' #FFFFFF',
+OVERLAY: 'rgba(0,0,0,0.6)',
+SUCCESS:'#00B37E',
+FAIL: '#FF0000',
+SHAPE: '#2A2634',
+},
+
+ FONT_SIZE: {
+
+SMALL: 10,
+MEDIUM: 14,
+LARGE: 16,
+LARGER: 18,
+SUBTITLE: 24,
+TITLE: 28,
+EXTRA_LARGE: 32
+},
+
+ FONT_FAMILY: {
+
+LIGHT: 'Inter_300Light',
+REGULAR: 'Inter_400Regular',
+SEMI_BOLD: 'Inter_600SemiBold',
+BOLD: 'Inter_700Bold',
+}
+};
