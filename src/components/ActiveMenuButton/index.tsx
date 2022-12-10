@@ -8,18 +8,21 @@ export interface ActiveMenuButtonProps {
   iconName: string
 }
 
-
-
 export function ActiveMenuButton({menuName, iconName, ...rest}: ActiveMenuButtonProps) {
   return (
     <View style={styles.containerShadow}>
       <View {...rest} style={styles.container}>
         <View style={styles.iconContainer}>
-        <Icon name={iconName}  size={32} color={'#F9A8D4'}/> 
+          <Icon 
+           name={iconName}  
+           size={32} 
+           color={'#F9A8D4'}
+          /> 
         </View>
-        <Text style={styles.menuName}> {menuName}</Text>
-
+         <Text style={styles.menuName}>
+          {menuName}
+         </Text>
       </View>
-      </View>
+    </View>
   );
-}
+};

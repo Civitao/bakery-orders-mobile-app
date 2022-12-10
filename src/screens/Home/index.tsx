@@ -1,22 +1,26 @@
 
 import { useState, useEffect } from 'react'
-import { useNavigation, useRoute } from '@react-navigation/native'
+import { useNavigation } from '@react-navigation/native'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { Image, FlatList, Text, TouchableOpacity, View } from 'react-native';
 
 import { styles } from './styles';
 import logoImg from '../../../assets/logo-delicias-da-tia-ni-big.png'
 import { Feather, Fontisto } from '@expo/vector-icons'
-
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
 import { ItemCard, ItemCardProps } from '../../components/ItemCard';
 import { PopularCard, PopularCardProps } from '../../components/PopularCard';
 import { useCartItems } from '../../hooks/CartItemsHook';
-import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { ActiveMenuButton } from '../../components/ActiveMenuButton';
 import { api } from '../../services/api';
 
-
+  // interface FamiliesProps {
+  //   id: string;
+  //   name: string;
+  //   iconName: string;
+  //   ref: number;
+  // }
 
 const familiesIdentifiers = [
   {
@@ -50,19 +54,19 @@ const familiesIdentifiers = [
   const navigation = useNavigation();
   const [populars, setPopulars] = useState<PopularCardProps[]>([]);
   const [items, setItems] = useState<ItemCardProps[]>([]);
-  const [selectedRef, setSelectedRef] = useState(10);
-  const { cartItemsList, setCartItemsList } = useCartItems()
-
-
+  const [selectedRef, setSelectedRef] = useState(0);
+  const [selectedId, setSelectedId] = useState("080f1d38-b885-4e64-a634-bf2d605dfdee");
+  const {cartItemsList, setCartItemsList} = useCartItems()
+  // const [families, setFamilies] = useState<FamiliesProps[]>([])
 
   async function getFamilyItems(selectedId: string, ref: number) {
-    setSelectedRef(ref)
 
+    ref;
     try {
       await api.get(`/families/${selectedId}/items`)
-        .then(function(response) {
-          setItems(response.data)
-        })
+       .then(function(response) {
+         setItems(response.data)   
+      })
 
     } catch (error) {
       console.log(error)
@@ -71,73 +75,104 @@ const familiesIdentifiers = [
   };
 
   useEffect(() => {
+   
+    // api.get('/families').
+    // then(function(response) {
+    //   setFamilies(response.data)
+    // })
+    
+    getFamilyItems(selectedId, selectedRef);
     api.get('/populars').
-      then(function(response) {
-        setPopulars(response.data)
-      })
-  }, []);
+    then(function(response) {
+      setPopulars(response.data)
+    });
+  }, [ selectedId]);
 
 
-  function handleOpenItem({ ...props }: ItemCardProps) {
-    navigation.navigate('product', { ...props })
+  function handleOpenItem({...props}: ItemCardProps) {
+    navigation.navigate('product', {...props})
   };
-
-
+ 
   return (
 
-    <SafeAreaView style={styles.container}>
-      <View style={styles.cartButtonShadow}>
+    <SafeAreaView
+    style={styles.container}
+    >
+      <View 
+      style={styles.cartButtonShadow}
+      >
         <TouchableOpacity
           activeOpacity={0.6}
           onPress={() => navigation.navigate('cart')}
-          style={styles.cartButton}>
+          style={styles.cartButton}
+        >
 
           <Feather
             name='shopping-cart'
             color="black"
-            size={24} />
+            size={24} 
+          />
 
-          <View style={styles.badge}>
-            <Text style={styles.badgeNum}> {(cartItemsList.length)} </Text>
+          <View 
+           style={styles.badge}
+          >
+            <Text 
+             style={styles.badgeNum}
+            >
+              {(cartItemsList.length)} 
+            </Text>
           </View>
         </TouchableOpacity>
       </View>
 
-      <View style={styles.searchButtonShadow}>
+      <View 
+       style={styles.searchButtonShadow}
+      >
         <TouchableOpacity
           onPress={() => navigation.navigate('search')}
           style={styles.searchButton}>
           <Fontisto
             name="search"
             color="black"
-            size={20} />
+            size={20} 
+          />
         </TouchableOpacity>
       </View>
 
       <Image
         source={logoImg}
-        style={styles.logo} />
+        style={styles.logo} 
+      />
 
 
       <FlatList
         data={familiesIdentifiers}
         renderItem={({ item, index }) => (
           <View
-            style={(selectedRef === index ? styles.activeButtonShadow
-             : styles.menuButtonShadow)}>
+            style={(selectedRef === index ? 
+              styles.activeButtonShadow :
+              styles.menuButtonShadow)}
+          >
             <TouchableOpacity
               activeOpacity={0.6}
-              onPress={() => { getFamilyItems(item.id, item.ref); }}
+              onPress={() => {setSelectedRef(item.ref); 
+              setSelectedId(item.id);}}
               key={selectedRef}
-              style={(selectedRef === index ? styles.activeButton
-               : styles.menuButton)}>
+              style={(selectedRef === index ? 
+                styles.activeButton :
+                styles.menuButton)}
+            >
 
-              {(selectedRef === index ? <ActiveMenuButton 
-              iconName={item.iconName} 
-              menuName={item.name} />
-                : <Icon name={item.iconName} 
-                size={32} 
-                color='white' />)}
+              {(selectedRef === index ? 
+                <ActiveMenuButton 
+                 iconName={item.iconName} 
+                 menuName={item.name} 
+                /> :
+                <Icon 
+                 name={item.iconName} 
+                 size={32} 
+                 color='white'
+                />)}
 
             </TouchableOpacity>
           </View>
@@ -156,19 +191,23 @@ const familiesIdentifiers = [
             onPress={() => handleOpenItem(item)}
           />
 
-        )}
+       )}
 
         horizontal
         showsHorizontalScrollIndicator={false}
         contentContainerStyle={styles.contentList}
         ListEmptyComponent={() => (
-          <Text style={styles.emptyText}>
+          <Text 
+           style={styles.emptyText}
+          >
             Selecione um menu acima
           </Text>
         )}
       />
 
-      <Text style={styles.popular}>
+      <Text 
+       style={styles.popular}
+      >
         Populares
       </Text>
 
